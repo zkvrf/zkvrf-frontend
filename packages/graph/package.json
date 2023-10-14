@@ -1,14 +1,13 @@
 {
-  "name": "zkvrf",
+  "name": "@zkvrf/graph",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ zkvrf",
-    "create-local": "graph create --node http://localhost:8020/ zkvrf",
-    "remove-local": "graph remove --node http://localhost:8020/ zkvrf",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 zkvrf",
-    "test": "graph test"
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ zkvrf-test",
+    "create-local": "graph create --node http://localhost:8020/ zkvrf-test",
+    "remove-local": "graph remove --node http://localhost:8020/ zkvrf-test",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 zkvrf-test"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.59.0",

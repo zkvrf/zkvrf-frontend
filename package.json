@@ -1,6 +1,7 @@
 {
   "name": "zkvrf-frontend",
   "private": true,
+  "license": "UNLICENSED",
   "workspaces": [
     "packages/*"
   ],

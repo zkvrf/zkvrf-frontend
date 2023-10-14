@@ -14,33 +14,14 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - ConfigSet
-        - FundsRecovered
-        - OwnershipTransferRequested
-        - OwnershipTransferred
         - ProvingKeyDeregistered
         - ProvingKeyRegistered
         - RandomWordsFulfilled
         - RandomWordsRequested
-        - SubscriptionCanceled
-        - SubscriptionConsumerAdded
-        - SubscriptionConsumerRemoved
-        - SubscriptionCreated
-        - SubscriptionFunded
-        - SubscriptionOwnerTransferRequested
-        - SubscriptionOwnerTransferred
       abis:
         - name: VRFCoordinatorV2
           file: ./abis/VRFCoordinatorV2.json
       eventHandlers:
-        - event: ConfigSet(uint16,uint32,uint32,uint32,int256,(uint32,uint32,uint32,uint32,uint32,uint24,uint24,uint24,uint24))
-          handler: handleConfigSet
-        - event: FundsRecovered(address,uint256)
-          handler: handleFundsRecovered
-        - event: OwnershipTransferRequested(indexed address,indexed address)
-          handler: handleOwnershipTransferRequested
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: ProvingKeyDeregistered(bytes32,indexed address)
           handler: handleProvingKeyDeregistered
         - event: ProvingKeyRegistered(bytes32,indexed address)
@@ -49,18 +30,4 @@ dataSources:
           handler: handleRandomWordsFulfilled
         - event: RandomWordsRequested(indexed bytes32,uint256,uint256,indexed uint64,uint16,uint32,uint32,indexed address)
           handler: handleRandomWordsRequested
-        - event: SubscriptionCanceled(indexed uint64,address,uint256)
-          handler: handleSubscriptionCanceled
-        - event: SubscriptionConsumerAdded(indexed uint64,address)
-          handler: handleSubscriptionConsumerAdded
-        - event: SubscriptionConsumerRemoved(indexed uint64,address)
-          handler: handleSubscriptionConsumerRemoved
-        - event: SubscriptionCreated(indexed uint64,address)
-          handler: handleSubscriptionCreated
-        - event: SubscriptionFunded(indexed uint64,uint256,uint256)
-          handler: handleSubscriptionFunded
-        - event: SubscriptionOwnerTransferRequested(indexed uint64,address,address)
-          handler: handleSubscriptionOwnerTransferRequested
-        - event: SubscriptionOwnerTransferred(indexed uint64,address,address)
-          handler: handleSubscriptionOwnerTransferred
       file: ./src/vrf-coordinator-v-2.ts
