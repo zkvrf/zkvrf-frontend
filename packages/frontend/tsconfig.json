@@ -5,7 +5,7 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "module": "CommonJS",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "ES2020",
@@ -16,7 +16,7 @@
     "paths": {
       "~/*": ["./app/*"]
     },
-    "skipLibCheck": true,
+    // "skipLibCheck": true,
 
     // Remix takes care of building everything in `remix build`.
     "noEmit": true

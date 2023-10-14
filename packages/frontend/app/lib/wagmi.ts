@@ -40,4 +40,4 @@ export const wagmiConfig = createConfig({
 });
 
 // 3. Create modal
-createWeb3Modal({ wagmiConfig, projectId, chains });
+createWeb3Modal({ wagmiConfig, projectId, chains, defaultChain: chains[0] });

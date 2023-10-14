@@ -7,7 +7,6 @@ const config = {
       events: true,
     },
   },
-  transpileModules: ["boring-avatars"]
 };
 
 export default config;
