@@ -3,7 +3,7 @@ const config = {
   browserNodeBuiltinsPolyfill: {
     modules: {
       buffer: true,
-      fs: "empty",
+      fs: 'empty',
       events: true,
     },
   },

@@ -1,9 +1,9 @@
-import { AlertTriangle, DicesIcon, UserIcon } from "lucide-react";
-import { Container } from "~/components/Container";
-import { DataTableDemo } from "~/components/DataTable";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { Separator } from "~/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { AlertTriangle, DicesIcon, UserIcon } from 'lucide-react';
+import { Container } from '~/components/Container';
+import { DataTableDemo } from '~/components/DataTable';
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
+import { Separator } from '~/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 
 export default function DashboardPage() {
   return (
@@ -29,7 +29,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {(1234).toLocaleString("en-US")}
+                  {(1234).toLocaleString('en-US')}
                 </div>
               </CardContent>
             </Card>
@@ -42,7 +42,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {(10).toLocaleString("en-US")}
+                  {(10).toLocaleString('en-US')}
                 </div>
               </CardContent>
             </Card>
@@ -55,7 +55,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {(1337).toLocaleString("en-US")}
+                  {(1337).toLocaleString('en-US')}
                 </div>
               </CardContent>
             </Card>

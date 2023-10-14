@@ -6,7 +6,7 @@ dataSources:
     name: VRFCoordinatorV2
     network: sepolia
     source:
-      address: "0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625"
+      address: '0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625'
       abi: VRFCoordinatorV2
       startBlock: 2751514
     mapping:

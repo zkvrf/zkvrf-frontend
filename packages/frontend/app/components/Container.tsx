@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { cn } from "~/lib/utils";
+import { ReactNode } from 'react';
+import { cn } from '~/lib/utils';
 
 export function Container({
   children,
@@ -9,7 +9,7 @@ export function Container({
   className?: string;
 }) {
   return (
-    <div className={cn(`px-2 md:px-4 max-w-6xl w-full mx-auto`, className)}>
+    <div className={cn(`mx-auto w-full max-w-6xl px-2 md:px-4`, className)}>
       {children}
     </div>
   );

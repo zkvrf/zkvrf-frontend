@@ -1,13 +1,13 @@
-import React from "react";
-import { useRevalidator } from "@remix-run/react";
+import { useRevalidator } from '@remix-run/react';
+import React from 'react';
 
 export const clientHints = {
   theme: {
-    cookieName: "CH-prefers-color-scheme",
+    cookieName: 'CH-prefers-color-scheme',
     getValueCode: `window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'`,
-    fallback: "light",
+    fallback: 'light',
     transform(value: string | null) {
-      return value === "dark" ? "dark" : "light";
+      return value === 'dark' ? 'dark' : 'light';
     },
   },
   // add other hints here
@@ -23,10 +23,10 @@ function getCookieValue(cookieString: string, name: ClientHintNames) {
     throw new Error(`Unknown client hint: ${name}`);
   }
   const value = cookieString
-    .split(";")
+    .split(';')
     .map((c) => c.trim())
-    .find((c) => c.startsWith(hint.cookieName + "="))
-    ?.split("=")[1];
+    .find((c) => c.startsWith(hint.cookieName + '='))
+    ?.split('=')[1];
 
   return value ? decodeURIComponent(value) : null;
 }
@@ -39,29 +39,26 @@ function getCookieValue(cookieString: string, name: ClientHintNames) {
  */
 export function getHints(request?: Request) {
   const cookieString =
-    typeof document !== "undefined"
+    typeof document !== 'undefined'
       ? document.cookie
-      : typeof request !== "undefined"
-      ? request.headers.get("Cookie") ?? ""
-      : "";
+      : typeof request !== 'undefined'
+      ? request.headers.get('Cookie') ?? ''
+      : '';
 
   const hints = Object.entries(clientHints).reduce(
     (acc, [name, hint]) => {
       const hintName = name as ClientHintNames;
-      // using ignore because it's not an issue with only one hint, but will
-      // be with more than one...
-      // @ts-ignore PR to improve these types is welcome
       const transformedHint = hint.transform(
-        getCookieValue(cookieString, hintName) ?? hint.fallback,
+        getCookieValue(cookieString, hintName) ?? hint.fallback
       );
       acc[hintName] = transformedHint;
       return acc;
     },
     {} as {
       [name in ClientHintNames]: ReturnType<
-        (typeof clientHints)[name]["transform"]
+        (typeof clientHints)[name]['transform']
       >;
-    },
+    }
   );
 
   return hints;
@@ -76,16 +73,16 @@ export function ClientHintCheck({ nonce }: { nonce: string }) {
   const { revalidate } = useRevalidator();
 
   React.useEffect(() => {
-    const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const themeQuery = window.matchMedia('(prefers-color-scheme: dark)');
     function handleThemeChange() {
       document.cookie = `${clientHints.theme.cookieName}=${
-        themeQuery.matches ? "dark" : "light"
+        themeQuery.matches ? 'dark' : 'light'
       }`;
       revalidate();
     }
-    themeQuery.addEventListener("change", handleThemeChange);
+    themeQuery.addEventListener('change', handleThemeChange);
     return () => {
-      themeQuery.removeEventListener("change", handleThemeChange);
+      themeQuery.removeEventListener('change', handleThemeChange);
     };
   }, [revalidate]);
 
@@ -106,7 +103,7 @@ ${Object.values(clientHints)
     const cookieName = JSON.stringify(hint.cookieName);
     return `{ name: ${cookieName}, actual: String(${hint.getValueCode}), cookie: cookies[${cookieName}] }`;
   })
-  .join(",\n")}
+  .join(',\n')}
 ];
 
 for (const hint of hints) {
@@ -125,6 +122,6 @@ if (cookieChanged && navigator.cookieEnabled) {
 }
 
 // Use nonce for the script tag
-export const NonceContext = React.createContext<string>("");
+export const NonceContext = React.createContext<string>('');
 export const NonceProvider = NonceContext.Provider;
 export const useNonce = () => React.useContext(NonceContext);

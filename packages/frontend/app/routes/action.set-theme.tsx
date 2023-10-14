@@ -1,15 +1,15 @@
-import { json } from "@remix-run/node";
-import type { ActionFunction } from "@remix-run/node";
-import { useFetcher } from "@remix-run/react";
-import { setTheme } from "~/lib/theme-session.server";
-import type { Theme } from "~/lib/utils";
-import { useHints, isTheme, useRequestInfo } from "~/lib/utils";
-import { ModeToggle } from "~/components/ModeToggle";
+import { json } from '@remix-run/node';
+import type { ActionFunction } from '@remix-run/node';
+import { useFetcher } from '@remix-run/react';
+import { ModeToggle } from '~/components/ModeToggle';
+import { setTheme } from '~/lib/theme-session.server';
+import type { Theme } from '~/lib/utils';
+import { isTheme, useHints, useRequestInfo } from '~/lib/utils';
 
 export const action: ActionFunction = async ({ request }) => {
   const requestText = await request.text();
   const form = new URLSearchParams(requestText);
-  const theme = form.get("theme");
+  const theme = form.get('theme');
 
   if (!isTheme(theme)) {
     return json({
@@ -22,9 +22,9 @@ export const action: ActionFunction = async ({ request }) => {
     { success: true },
     {
       headers: {
-        "Set-Cookie": setTheme(theme === "system" ? undefined : theme),
+        'Set-Cookie': setTheme(theme === 'system' ? undefined : theme),
       },
-    },
+    }
   );
 };
 
@@ -34,7 +34,7 @@ export function ThemeSwitch() {
   const handleSelect = (themeValue: Theme) => {
     fetcher.submit(
       { theme: themeValue },
-      { method: "post", action: "/action/set-theme" },
+      { method: 'post', action: '/action/set-theme' }
     );
   };
 

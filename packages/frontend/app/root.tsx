@@ -1,4 +1,10 @@
-import { DataFunctionArgs, LinksFunction, json } from "@remix-run/node";
+import { Layout } from './components/Layout';
+import { ClientHintCheck, getHints, useNonce } from './lib/client-hints';
+import { getTheme } from './lib/theme-session.server';
+import { cn } from './lib/utils';
+import { wagmiConfig } from './lib/wagmi';
+import { useTheme } from './routes/action.set-theme';
+import { DataFunctionArgs, LinksFunction, json } from '@remix-run/node';
 import {
   Links,
   LiveReload,
@@ -7,32 +13,26 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
-import { ReactNode } from "react";
-import { WagmiConfig } from "wagmi";
-import stylesheet from "~/tailwind.css";
-import { Layout } from "./components/Layout";
-import { ClientHintCheck, getHints, useNonce } from "./lib/client-hints";
-import { getTheme } from "./lib/theme-session.server";
-import { cn } from "./lib/utils";
-import { wagmiConfig } from "./lib/wagmi";
-import { useTheme } from "./routes/action.set-theme";
+} from '@remix-run/react';
+import { ReactNode } from 'react';
+import { WagmiConfig } from 'wagmi';
+import stylesheet from '~/tailwind.css';
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesheet },
+  { rel: 'stylesheet', href: stylesheet },
   {
-    rel: "icon",
-    href: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>",
+    rel: 'icon',
+    href: 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>',
   },
 ];
 
 export const meta: MetaFunction = () => {
   return [
     {
-      name: "viewport",
-      content: "width=device-width,initial-scale=1",
+      name: 'viewport',
+      content: 'width=device-width,initial-scale=1',
     },
-    { title: "zkVRF" },
+    { title: 'zkVRF' },
   ];
 };
 

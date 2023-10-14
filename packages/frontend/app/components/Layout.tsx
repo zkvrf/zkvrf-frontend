@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import { Container } from "./Container";
-import { ThemeSwitch } from "~/routes/action.set-theme";
-import WalletButton from "./WalletButton";
+import { Container } from './Container';
+import WalletButton from './WalletButton';
+import { ReactNode } from 'react';
+import { ThemeSwitch } from '~/routes/action.set-theme';
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
