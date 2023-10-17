@@ -30,3 +30,16 @@ type RandomnessRequested @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+type Request @entity {
+  id: String!
+  operator: Operator!
+  request: RandomnessRequested!
+  fulfillment: RandomnessFulfilled
+}
+
+type Operator @entity(immutable: true) {
+  id: Bytes!
+  registration: OperatorRegistered!
+  requests: [Request!]! @derivedFrom(field: "operator")
+}

@@ -4,9 +4,11 @@ import {
   RandomnessRequested as RandomnessRequestedEvent,
 } from '../generated/ZKVRF/ZKVRF';
 import {
+  Operator,
   OperatorRegistered,
   RandomnessFulfilled,
   RandomnessRequested,
+  Request,
 } from '../generated/schema';
 
 export function handleOperatorRegistered(event: OperatorRegisteredEvent): void {
@@ -20,6 +22,12 @@ export function handleOperatorRegistered(event: OperatorRegisteredEvent): void {
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  const operator = new Operator(event.params.operatorPublicKey);
+
+  operator.registration = entity.id;
+
+  operator.save();
 }
 
 export function handleRandomnessFulfilled(
@@ -39,6 +47,16 @@ export function handleRandomnessFulfilled(
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  const request = Request.load(event.params.requestId.toString());
+
+  if (!request) {
+    throw new Error('Request not found');
+  }
+
+  request.fulfillment = entity.id;
+
+  request.save();
 }
 
 export function handleRandomnessRequested(
@@ -59,4 +77,10 @@ export function handleRandomnessRequested(
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
+
+  const request = new Request(event.params.requestId.toString());
+
+  request.request = entity.id;
+
+  request.save();
 }
