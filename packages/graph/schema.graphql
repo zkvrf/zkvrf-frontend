@@ -1,42 +1,31 @@
-type ProvingKeyDeregistered @entity(immutable: true) {
+type OperatorRegistered @entity(immutable: true) {
   id: Bytes!
-  keyHash: Bytes! # bytes32
-  oracle: Bytes! # address
+  operatorPublicKey: Bytes! # bytes32
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type ProvingKeyRegistered @entity(immutable: true) {
-  id: Bytes!
-  keyHash: Bytes! # bytes32
-  oracle: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RandomWordsFulfilled @entity(immutable: true) {
+type RandomnessFulfilled @entity(immutable: true) {
   id: Bytes!
   requestId: BigInt! # uint256
-  outputSeed: BigInt! # uint256
-  payment: BigInt! # uint96
-  success: Boolean! # bool
+  operatorPublicKey: Bytes! # bytes32
+  requester: Bytes! # address
+  nonce: BigInt! # uint256
+  randomness: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type RandomWordsRequested @entity(immutable: true) {
+type RandomnessRequested @entity(immutable: true) {
   id: Bytes!
-  keyHash: Bytes! # bytes32
   requestId: BigInt! # uint256
-  preSeed: BigInt! # uint256
-  subId: BigInt! # uint64
-  minimumRequestConfirmations: Int! # uint16
+  operatorPublicKey: Bytes! # bytes32
+  requester: Bytes! # address
+  minBlockConfirmations: Int! # uint16
   callbackGasLimit: BigInt! # uint32
-  numWords: BigInt! # uint32
-  sender: Bytes! # address
+  nonce: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
