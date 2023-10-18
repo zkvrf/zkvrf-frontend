@@ -1,16 +1,21 @@
 'use client';
 
 import { AlertTriangle, DicesIcon, UserIcon } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Container } from '~/components/Container';
 import { NavTabs } from '~/components/NavTabs';
-import { Prove } from '~/components/Prove';
 import { RequestsTable } from '~/components/RequestsTable';
 import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
 import { Tabs, TabsContent } from '~/components/ui/tabs';
 import { useRequests } from '~/hooks/useRequests';
+
+const Prove = dynamic(
+  () => import('~/components/Prove').then((module) => module.Prove),
+  { ssr: false }
+);
 
 export default function DashboardPage() {
   const { data } = useRequests();

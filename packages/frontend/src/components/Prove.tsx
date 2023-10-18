@@ -1,9 +1,10 @@
 'use client';
 
 import { circuit } from './circuit';
+import { Button } from './ui/button';
 import { BarretenbergBackend } from '@noir-lang/backend_barretenberg';
 import { Noir } from '@noir-lang/noir_js';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 export function Prove(input: {
   private_key: string;
@@ -11,7 +12,10 @@ export function Prove(input: {
   message_hash: string;
   useProof: (proof: Uint8Array) => void;
 }) {
-  const [noir, setNoir] = useState<Noir | null>(null);
+  const noir = useMemo(() => {
+    const backend = new BarretenbergBackend(circuit);
+    return new Noir(circuit, backend);
+  }, []);
 
   const calculateProof = async () => {
     console.log('Proof started');
@@ -24,19 +28,5 @@ export function Prove(input: {
     input.useProof(proof.proof);
   };
 
-  const initNoir = async () => {
-    const backend = new BarretenbergBackend(circuit);
-    const noir = new Noir(circuit, backend);
-    setNoir(noir);
-  };
-
-  useEffect(() => {
-    initNoir();
-  }, []);
-
-  return (
-    <div className="border" onClick={calculateProof}>
-      Calculate Proof
-    </div>
-  );
+  return <Button onClick={calculateProof}>Calculate Proof</Button>;
 }
