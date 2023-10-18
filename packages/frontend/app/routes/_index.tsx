@@ -1,5 +1,6 @@
 import { AlertTriangle, DicesIcon, UserIcon } from 'lucide-react';
 import { Container } from '~/components/Container';
+import Prove from '~/components/Prove';
 import { RequestsTable } from '~/components/RequestsTable';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
@@ -17,7 +18,7 @@ export default function DashboardPage() {
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analytics" disabled>
+          <TabsTrigger value="myrequests">
             My Requests
           </TabsTrigger>
         </TabsList>
@@ -67,6 +68,9 @@ export default function DashboardPage() {
           </div>
           <Separator />
           <RequestsTable requests={data.requests} />
+        </TabsContent>
+        <TabsContent value="myrequests" className="space-y-4">
+                    <Prove private_key={"0"} message_hash={"0"} public_key={"0"} />
         </TabsContent>
       </Tabs>
     </Container>
