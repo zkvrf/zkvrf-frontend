@@ -1,16 +1,12 @@
+'use client';
+
 import { Button } from './ui/button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { AvatarProps } from 'boring-avatars';
-import { ComponentType, Suspense, lazy } from 'react';
+import Avatar from 'boring-avatars';
+import { Suspense } from 'react';
 import { useAccount } from 'wagmi';
 
-const Avatar = lazy<ComponentType<AvatarProps>>(() =>
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  import('boring-avatars').then((m) => m.default)
-);
-
-export default function WalletButton() {
+export function WalletButton() {
   const { address, isConnected } = useAccount();
   const { open } = useWeb3Modal();
 

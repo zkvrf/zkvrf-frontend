@@ -1,33 +1,31 @@
-import { AlertTriangle, DicesIcon, UserIcon } from 'lucide-react';
+'use client';
+
+import { AlertTriangle, DicesIcon } from 'lucide-react';
 import { Container } from '~/components/Container';
-import Prove from '~/components/Prove';
+import { NavTabs } from '~/components/NavTabs';
 import { RequestsTable } from '~/components/RequestsTable';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
-import { useRequests } from '~/hooks/useRequests';
+import { Tabs, TabsContent } from '~/components/ui/tabs';
+import { useOperatorRequests } from '~/hooks/useRequests';
 
-export default function DashboardPage() {
-  const { data } = useRequests();
-
+export default function OperatorPage() {
+  const operator =
+    '0x15d76b9641dc1e52de6f9530a4161f077c348b1329efaeb0e052f13b5bf1ce49';
+  const { data } = useOperatorRequests({ operator });
   return (
     <Container className="space-y-4 p-8 pt-6">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-3xl font-bold tracking-tight">Operator</h2>
       </div>
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="myrequests">
-            My Requests
-          </TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="operator" className="space-y-4">
+        <NavTabs />
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total Requests
+                  Your Total Requests
                 </CardTitle>
                 <DicesIcon size="1rem" className="text-muted-foreground" />
               </CardHeader>
@@ -40,7 +38,7 @@ export default function DashboardPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Open Requests
+                  Your Open Requests
                 </CardTitle>
                 <AlertTriangle size="1rem" className="text-muted-foreground" />
               </CardHeader>
@@ -52,25 +50,9 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Registered Operators
-                </CardTitle>
-                <UserIcon size="1rem" className="text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {data.operators.length.toLocaleString('en-US')}
-                </div>
-              </CardContent>
-            </Card>
           </div>
           <Separator />
           <RequestsTable requests={data.requests} />
-        </TabsContent>
-        <TabsContent value="myrequests" className="space-y-4">
-                    <Prove private_key={"0"} message_hash={"0"} public_key={"0"} />
         </TabsContent>
       </Tabs>
     </Container>

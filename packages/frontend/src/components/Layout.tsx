@@ -1,7 +1,6 @@
 import { Container } from './Container';
-import WalletButton from './WalletButton';
+import { WalletButton } from './WalletButton';
 import { ReactNode } from 'react';
-import { ThemeSwitch } from '~/routes/action.set-theme';
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
@@ -16,7 +15,6 @@ export function Layout({ children }: { children: ReactNode }) {
 
           <div className="flex items-center gap-4">
             <WalletButton />
-            <ThemeSwitch />
           </div>
         </Container>
       </header>
