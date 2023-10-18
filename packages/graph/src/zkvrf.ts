@@ -81,6 +81,7 @@ export function handleRandomnessRequested(
   const request = new Request(event.params.requestId.toString());
 
   request.request = entity.id;
+  request.operator = event.params.operatorPublicKey;
 
   request.save();
 }
