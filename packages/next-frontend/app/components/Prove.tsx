@@ -17,7 +17,7 @@ function Prove(input: { private_key: string, public_key: string, message_hash: s
             message_hash: input.message_hash
         });
         console.log('Proof created: ', proof);
-        input.useProof(proof);
+        input.useProof(proof.proof);
     };
 
     const initNoir = async () => {
