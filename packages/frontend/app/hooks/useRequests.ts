@@ -27,7 +27,7 @@ interface Operator {
 
 const fetcher = (query: RequestDocument) => {
   return request<{ requests: Request[]; operators: Operator[] }>(
-    'https://api.studio.thegraph.com/query/7022/zkvrf-test/version/latest',
+    'https://api.studio.thegraph.com/query/7022/zkvrf-scroll-mainnet/version/latest',
     query
   );
 };

@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: ZKVRF
-    network: scroll-sepolia
+    network: scroll
     source:
-      address: '0x0841dEF9362c205a5F59A5e232d925fC7A8d8537'
+      address: '0xFBF562a98aB8584178efDcFd09755FF9A1e7E3a2'
       abi: ZKVRF
-      startBlock: 1679953
+      startBlock: 91823
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

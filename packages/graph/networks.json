@@ -1,8 +1,8 @@
 {
-  "scroll-sepolia": {
+  "scroll": {
     "ZKVRF": {
-      "address": "0x9D7c4Ff3ccCfFbdc11220B4Fe1cF453E71E614Ae",
-      "startBlock": 1641846
+      "address": "0xFBF562a98aB8584178efDcFd09755FF9A1e7E3a2",
+      "startBlock": 91823
     }
   }
 }
