@@ -1,7 +1,11 @@
 [
   {
     "inputs": [
-      { "internalType": "address", "name": "verifier_", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "verifier_",
+        "type": "address"
+      },
       {
         "internalType": "address",
         "name": "blockHashHistorian_",
@@ -107,20 +111,36 @@
   {
     "inputs": [],
     "name": "P",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "blockHashHistorian",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "requestId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "requestId",
+        "type": "uint256"
+      },
       {
         "components": [
           {
@@ -143,8 +163,16 @@
             "name": "callbackGasLimit",
             "type": "uint32"
           },
-          { "internalType": "address", "name": "requester", "type": "address" },
-          { "internalType": "uint256", "name": "nonce", "type": "uint256" }
+          {
+            "internalType": "address",
+            "name": "requester",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          }
         ],
         "internalType": "struct ZKVRF.VRFRequest",
         "name": "request",
@@ -155,7 +183,11 @@
         "name": "signature",
         "type": "bytes32[2]"
       },
-      { "internalType": "bytes", "name": "snarkProof", "type": "bytes" }
+      {
+        "internalType": "bytes",
+        "name": "snarkProof",
+        "type": "bytes"
+      }
     ],
     "name": "fulfillRandomness",
     "outputs": [],
@@ -164,12 +196,24 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "lastOperator", "type": "bytes32" },
-      { "internalType": "uint256", "name": "maxPageSize", "type": "uint256" }
+      {
+        "internalType": "bytes32",
+        "name": "lastOperator",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxPageSize",
+        "type": "uint256"
+      }
     ],
     "name": "getOperators",
     "outputs": [
-      { "internalType": "bytes32[]", "name": "out", "type": "bytes32[]" }
+      {
+        "internalType": "bytes32[]",
+        "name": "out",
+        "type": "bytes32[]"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -177,19 +221,41 @@
   {
     "inputs": [],
     "name": "getOperatorsCount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "requester", "type": "address" },
-      { "internalType": "bytes32", "name": "blockHash", "type": "bytes32" },
-      { "internalType": "uint256", "name": "nonce", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "requester",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "blockHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nonce",
+        "type": "uint256"
+      }
     ],
     "name": "hashSeedToField",
     "outputs": [
-      { "internalType": "bytes32", "name": "hash", "type": "bytes32" }
+      {
+        "internalType": "bytes32",
+        "name": "hash",
+        "type": "bytes32"
+      }
     ],
     "stateMutability": "pure",
     "type": "function"
@@ -203,29 +269,55 @@
       }
     ],
     "name": "isOperator",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "nextRequestId",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "requestId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "requestId",
+        "type": "uint256"
+      }
     ],
     "name": "randomness",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "publicKey", "type": "bytes32" }
+      {
+        "internalType": "bytes32",
+        "name": "publicKey",
+        "type": "bytes32"
+      }
     ],
     "name": "registerOperator",
     "outputs": [],
@@ -234,10 +326,20 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "requester", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "requester",
+        "type": "address"
+      }
     ],
     "name": "requestNonces",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -253,28 +355,52 @@
         "name": "minBlockConfirmations",
         "type": "uint16"
       },
-      { "internalType": "uint32", "name": "callbackGasLimit", "type": "uint32" }
+      {
+        "internalType": "uint32",
+        "name": "callbackGasLimit",
+        "type": "uint32"
+      }
     ],
     "name": "requestRandomness",
     "outputs": [
-      { "internalType": "uint256", "name": "requestId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "requestId",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "requestId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "requestId",
+        "type": "uint256"
+      }
     ],
     "name": "requests",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "verifier",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   }
