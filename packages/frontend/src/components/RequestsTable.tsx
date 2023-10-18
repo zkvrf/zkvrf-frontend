@@ -101,10 +101,10 @@ export function RequestsTable({ requests }: { requests: Request[] }) {
     <div className="w-full space-y-4">
       <div className="flex items-center">
         <Input
-          placeholder="Filter ids..."
-          value={(table.getColumn('id')?.getFilterValue() as string) ?? ''}
+          placeholder="Filter IDs..."
+          value={(table.getColumn('ID')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('id')?.setFilterValue(event.target.value)
+            table.getColumn('ID')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
