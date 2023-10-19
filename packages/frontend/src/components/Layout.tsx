@@ -1,7 +1,7 @@
 import { Container } from './Container';
-import WalletButton from './WalletButton';
+import { WalletButton } from './WalletButton';
+import Link from 'next/link';
 import { ReactNode } from 'react';
-import { ThemeSwitch } from '~/routes/action.set-theme';
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
@@ -9,14 +9,13 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="border-b">
         <Container className="flex min-h-[4rem] items-center">
           <div className="flex-grow">
-            <strong className="font-bold">
+            <Link href="/" className="font-bold">
               <span className="mr-2">🎲</span> zkVRF
-            </strong>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">
             <WalletButton />
-            <ThemeSwitch />
           </div>
         </Container>
       </header>
