@@ -1,5 +1,6 @@
 import { Container } from './Container';
 import { WalletButton } from './WalletButton';
+import Link from 'next/link';
 import { ReactNode } from 'react';
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -8,9 +9,9 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="border-b">
         <Container className="flex min-h-[4rem] items-center">
           <div className="flex-grow">
-            <strong className="font-bold">
+            <Link href="/" className="font-bold">
               <span className="mr-2">🎲</span> zkVRF
-            </strong>
+            </Link>
           </div>
 
           <div className="flex items-center gap-4">

@@ -27,7 +27,11 @@ export function Prove({
   });
 
   return (
-    <Button disabled={isLoading} onClick={() => calculateProof()}>
+    <Button
+      className="w-full"
+      disabled={isLoading}
+      onClick={() => calculateProof()}
+    >
       {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Calculate
       Proof
     </Button>

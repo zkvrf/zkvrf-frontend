@@ -1,11 +1,9 @@
 import request, { type RequestDocument, Variables } from 'graphql-request';
 import useSWR from 'swr';
-import { Address } from 'viem';
+import { Address, Hex } from 'viem';
 
 export interface Request {
-  operator: {
-    id: string;
-  };
+  operator: Operator;
   request: {
     requestId: bigint;
     requester: Address;
@@ -13,6 +11,8 @@ export interface Request {
     blockNumber: bigint;
     blockTimestamp: bigint;
     transactionHash: string;
+    nonce: bigint;
+    callbackGasLimit: number;
   };
   fulfillment: {
     randomness: bigint;
@@ -21,8 +21,8 @@ export interface Request {
   } | null;
 }
 
-interface Operator {
-  id: string;
+export interface Operator {
+  id: Hex;
 }
 
 const fetcher = ([query, variables]: [RequestDocument, Variables]) => {
@@ -48,6 +48,8 @@ export function useRequests() {
             blockNumber
             blockTimestamp
             transactionHash
+            nonce
+            callbackGasLimit
           }
           fulfillment {
             randomness
@@ -67,10 +69,16 @@ export function useRequests() {
   );
 }
 
-export function useOperatorRequests({ operator }: { operator: string }) {
+export function useOperatorRequests({
+  operator,
+}: {
+  operator: string | undefined;
+}) {
   return useSWR(
-    [
-      `query Requests($operator: String) {
+    () =>
+      operator
+        ? [
+            `query Requests($operator: String) {
         requests(first: 1000, where: {operator: $operator}) {
           operator {
             id
@@ -82,6 +90,8 @@ export function useOperatorRequests({ operator }: { operator: string }) {
             blockNumber
             blockTimestamp
             transactionHash
+            nonce
+            callbackGasLimit
           }
           fulfillment {
             randomness
@@ -93,8 +103,9 @@ export function useOperatorRequests({ operator }: { operator: string }) {
           id
         }
       }`,
-      { operator },
-    ],
+            { operator },
+          ]
+        : null,
     fetcher,
     {
       fallbackData: { requests: [], operators: [] },
