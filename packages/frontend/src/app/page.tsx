@@ -8,7 +8,6 @@ import {
   Loader2,
   UserIcon,
 } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { Hex } from 'viem';
@@ -54,11 +53,6 @@ import { useRequests } from '~/hooks/useRequests';
 import { formatOperator } from '~/lib/address';
 import { ZKVRF_CONSUMER_ADDRESS } from '~/lib/constants';
 
-const Prove = dynamic(
-  () => import('~/components/Prove').then((module) => module.Prove),
-  { ssr: false }
-);
-
 export default function DashboardPage() {
   const { data, mutate: refresh } = useRequests();
 
@@ -70,16 +64,6 @@ export default function DashboardPage() {
           <Link href="/operator">Operator</Link>
         </Button>
       </div>
-      <Prove
-        privateKey={
-          '0x01c8bdf6686d4c8ba09db5f15ffee3c470a5e0ff54d6fbac3a548f9a666977'
-        }
-        messageHash={'0'}
-        publicKey={
-          '0x15d76b9641dc1e52de6f9530a4161f077c348b1329efaeb0e052f13b5bf1ce49'
-        }
-        onSuccess={console.log}
-      />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

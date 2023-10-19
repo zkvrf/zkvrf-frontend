@@ -1,6 +1,5 @@
 'use client';
 
-import { Prove } from './Prove';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import {
   Dialog,
@@ -25,7 +24,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { AlertCircle, ChevronDown, Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Suspense, useState } from 'react';
 import useSWR from 'swr';
 import { useLocalStorage } from 'usehooks-ts';
 import { Hex, zeroAddress } from 'viem';
@@ -57,6 +57,11 @@ import { Request } from '~/hooks/useRequests';
 import { formatAddress, formatOperator } from '~/lib/address';
 import { ZKVRF_ADDRESS } from '~/lib/constants';
 import { poseidon } from '~/lib/poseidon';
+
+const Prove = dynamic(
+  () => import('~/components/Prove').then((module) => module.Prove),
+  { ssr: false }
+);
 
 const columnHelper = createColumnHelper<Request>();
 
@@ -406,12 +411,20 @@ function FullfillRandomnessFlowContent({
             Loading…
           </Button>
         ) : (
-          <Prove
-            publicKey={operatorPublicKey!}
-            privateKey={operator}
-            messageHash={messageHash}
-            onSuccess={setProof}
-          />
+          <Suspense
+            fallback={
+              <Button className="w-full" disabled>
+                Loading…
+              </Button>
+            }
+          >
+            <Prove
+              publicKey={operatorPublicKey!}
+              privateKey={operator}
+              messageHash={messageHash}
+              onSuccess={setProof}
+            />
+          </Suspense>
         )}
       </DialogFooter>
     </>
