@@ -315,17 +315,12 @@ function FullfillRandomnessFlowContent({
     functionName: 'blockHashHistorian',
   });
 
-  // const { data: blockHash } = useContractRead({
-  //   abi: BlockHashHistorianABI,
-  //   address: blockHashHistorianAddress,
-  //   functionName: 'getBlockHash',
-  //   args: [request.request.blockNumber],
-  // });
-
-  const blockHash =
-    '0xaa59cb2fb1920b31ea53d4f1ebc1842325314f7a06dff126cdf4a9c7150f0a0f';
-
-  console.log({ blockHashHistorianAddress, blockHash });
+  const { data: blockHash } = useContractRead({
+    abi: BlockHashHistorianABI,
+    address: blockHashHistorianAddress,
+    functionName: 'getBlockHash',
+    args: [request.request.blockNumber],
+  });
 
   const { data: messageHash } = useContractRead({
     abi: zkvrfABI,
