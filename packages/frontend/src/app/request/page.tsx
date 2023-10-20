@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Confetti from 'react-confetti';
 import { useForm } from 'react-hook-form';
 import { useWindowSize } from 'usehooks-ts';
@@ -150,12 +150,13 @@ export function Randomness({ onSuccess }: { onSuccess?: () => void }) {
     args: [requestId!],
     enabled: !!requestId,
     watch: true,
-    onSuccess(data) {
-      if (data) {
-        setParty(true);
-      }
-    },
   });
+
+  useEffect(() => {
+    if (randomNumber) {
+      setParty(true);
+    }
+  }, [randomNumber]);
 
   async function onSubmit() {
     await writeAsync?.();
