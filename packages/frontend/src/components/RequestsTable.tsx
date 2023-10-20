@@ -177,7 +177,7 @@ export function RequestsTable({
 
   return (
     <div className="w-full space-y-4">
-      <div className="flex items-center">
+      <div className="flex items-center gap-4">
         <Input
           placeholder="Filter IDs..."
           value={(table.getColumn('ID')?.getFilterValue() as string) ?? ''}
@@ -186,6 +186,9 @@ export function RequestsTable({
           }
           className="max-w-sm"
         />
+        <Button variant="outline" onClick={() => onRefresh?.()}>
+          Refresh
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

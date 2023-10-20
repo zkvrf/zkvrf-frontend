@@ -3,8 +3,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import Confetti from 'react-confetti';
 import { useForm } from 'react-hook-form';
+import { useWindowSize } from 'usehooks-ts';
 import { Hex, decodeEventLog } from 'viem';
 import {
   useContractRead,
@@ -74,7 +76,7 @@ const formSchema = z.object({
   callbackGasLimit: z.number().int().positive().min(100000),
 });
 
-function Randomness() {
+export function Randomness({ onSuccess }: { onSuccess?: () => void }) {
   const { chain } = useNetwork();
   const { data: requestsData, mutate: refresh } = useRequests();
 
@@ -122,6 +124,7 @@ function Randomness() {
       });
       form.reset();
       refresh();
+      onSuccess?.();
     },
   });
 
@@ -137,6 +140,9 @@ function Randomness() {
     return event.args.requestId;
   }, [receipt]);
 
+  const { width, height } = useWindowSize();
+  const [party, setParty] = useState(false);
+
   const { data: randomNumber } = useContractRead({
     address: ZKVRF_CONSUMER_ADDRESS,
     abi: ZKVRFGlobalConsumerABI,
@@ -144,6 +150,11 @@ function Randomness() {
     args: [requestId!],
     enabled: !!requestId,
     watch: true,
+    onSuccess(data) {
+      if (data) {
+        setParty(true);
+      }
+    },
   });
 
   async function onSubmit() {
@@ -280,6 +291,17 @@ function Randomness() {
           )}
         </form>
       </Form>
+      <Confetti
+        className="!fixed"
+        width={width}
+        height={height}
+        numberOfPieces={party ? 500 : 0}
+        recycle={false}
+        onConfettiComplete={(confetti) => {
+          setParty(false);
+          confetti?.reset();
+        }}
+      />
     </Card>
   );
 }

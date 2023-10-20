@@ -1,5 +1,6 @@
 'use client';
 
+import { Randomness } from './request/page';
 import { AlertTriangle, DicesIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Container } from '~/components/Container';
@@ -62,11 +63,23 @@ export default function DashboardPage() {
         </Card>
       </div>
       <Separator />
+      <Randomness
+        onSuccess={() => {
+          setTimeout(() => {
+            refresh();
+          }, 2000);
+        }}
+      />
+      <Separator />
       <RequestsTable
         requests={data.requests.sort((r1, r2) =>
           BigInt(r1.request.requestId) > BigInt(r2.request.requestId) ? -1 : 1
         )}
-        onRefresh={() => refresh()}
+        onRefresh={() =>
+          setTimeout(() => {
+            refresh();
+          }, 2000)
+        }
       />
     </Container>
   );
