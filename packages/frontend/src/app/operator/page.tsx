@@ -7,6 +7,7 @@ import {
   Loader2,
   UserIcon,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { useIsClient, useLocalStorage } from 'usehooks-ts';
@@ -14,6 +15,7 @@ import { Hex } from 'viem';
 import {
   useContractRead,
   useContractWrite,
+  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
@@ -34,6 +36,7 @@ import {
 } from '~/components/ui/dialog';
 import { Input } from '~/components/ui/input';
 import { Separator } from '~/components/ui/separator';
+import { ToastAction } from '~/components/ui/toast';
 import { useToast } from '~/components/ui/use-toast';
 import { useOperatorRequests } from '~/hooks/useRequests';
 import { formatOperator } from '~/lib/address';
@@ -96,7 +99,9 @@ function OperatorRequests({ operator }: { operator: Hex }) {
     poseidon([BigInt(privateKey)])
   );
 
-  const { data } = useOperatorRequests({ operator: operatorPublicKey });
+  const { data, mutate: refresh } = useOperatorRequests({
+    operator: operatorPublicKey,
+  });
 
   const { data: isRegistered, isLoading } = useContractRead({
     abi: zkvrfABI,
@@ -150,7 +155,12 @@ function OperatorRequests({ operator }: { operator: Hex }) {
         </Card>
       </div>
       <Separator />
-      <RequestsTable requests={data.requests} />
+      <RequestsTable
+        requests={data.requests.sort((r1, r2) =>
+          BigInt(r1.request.requestId) > BigInt(r2.request.requestId) ? -1 : 1
+        )}
+        onRefresh={() => refresh()}
+      />
     </>
   );
 }
@@ -242,6 +252,7 @@ function OperatorSignupFlowContent({
 }: {
   onSuccess: (operator: Hex) => void;
 }) {
+  const { chain } = useNetwork();
   const { toast } = useToast();
   const operatorPrivateKey = useMemo(() => {
     for (;;) {
@@ -281,6 +292,16 @@ function OperatorSignupFlowContent({
     onSuccess() {
       toast({
         title: 'Operator key registered successfully',
+        action: (
+          <ToastAction altText="Check transaction" asChild>
+            <Link
+              href={`${chain?.blockExplorers?.default.url}/tx/${data?.hash}`}
+              target="_blank"
+            >
+              Check transaction
+            </Link>
+          </ToastAction>
+        ),
       });
       onSuccess?.(`0x${operatorPrivateKey.toString(16)}`);
     },
@@ -306,7 +327,7 @@ function OperatorSignupFlowContent({
       </p>
       <code className="block break-all">{operatorPublicKey}</code>
       {(!!prepareError?.message || !!writeError?.message) && (
-        <Alert variant="destructive">
+        <Alert className="max-h-40 overflow-auto" variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription className="break-all">

@@ -1,57 +1,13 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  AlertCircle,
-  AlertTriangle,
-  DicesIcon,
-  Loader2,
-  UserIcon,
-} from 'lucide-react';
+import { AlertTriangle, DicesIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { Hex } from 'viem';
-import {
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from 'wagmi';
-import { z } from 'zod';
-import { ZKVRFGlobalConsumerABI } from '~/abis/ZKVRFGlobalConsumer';
 import { Container } from '~/components/Container';
 import { RequestsTable } from '~/components/RequestsTable';
-import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert';
 import { Button } from '~/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '~/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '~/components/ui/form';
-import { Input } from '~/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
 import { Separator } from '~/components/ui/separator';
-import { useToast } from '~/components/ui/use-toast';
 import { useRequests } from '~/hooks/useRequests';
-import { formatOperator } from '~/lib/address';
-import { ZKVRF_CONSUMER_ADDRESS } from '~/lib/constants';
 
 export default function DashboardPage() {
   const { data, mutate: refresh } = useRequests();
@@ -106,182 +62,12 @@ export default function DashboardPage() {
         </Card>
       </div>
       <Separator />
-      <Randomness
-        operators={data.operators.map((operator) => operator.id)}
-        onSuccess={() => {
-          setTimeout(() => {
-            refresh();
-          }, 1000);
-        }}
+      <RequestsTable
+        requests={data.requests.sort((r1, r2) =>
+          BigInt(r1.request.requestId) > BigInt(r2.request.requestId) ? -1 : 1
+        )}
+        onRefresh={() => refresh()}
       />
-      <Separator />
-      <RequestsTable requests={data.requests} />
     </Container>
-  );
-}
-
-const formSchema = z.object({
-  operatorPublicKey: z
-    .string()
-    .refine(
-      (arg): arg is Hex => /^0x[0-9A-Fa-f]{64}$/.test(arg),
-      'Not a valid operator key'
-    ),
-  minBlockConfirmations: z.number().int().positive().min(4),
-  callbackGasLimit: z.number().int().positive().min(100000),
-});
-
-function Randomness({
-  operators,
-  onSuccess,
-}: {
-  operators: Hex[];
-  onSuccess?: () => void;
-}) {
-  const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      minBlockConfirmations: 4,
-      callbackGasLimit: 100000,
-    },
-  });
-  const operatorPublicKey = form.watch('operatorPublicKey');
-  const minBlockConfirmations = form.watch('minBlockConfirmations');
-  const callbackGasLimit = form.watch('callbackGasLimit');
-
-  const { config, error: prepareError } = usePrepareContractWrite({
-    abi: ZKVRFGlobalConsumerABI,
-    address: ZKVRF_CONSUMER_ADDRESS,
-    functionName: 'requestRandomness',
-    args: [operatorPublicKey, minBlockConfirmations, callbackGasLimit],
-    enabled: form.formState.isValid,
-  });
-
-  const { writeAsync, data, error: writeError } = useContractWrite(config);
-
-  const { isLoading: isConfirming } = useWaitForTransaction({
-    hash: data?.hash,
-    onSuccess() {
-      toast({
-        title: 'Random number requested successfully',
-      });
-      onSuccess?.();
-    },
-  });
-
-  async function onSubmit() {
-    await writeAsync?.();
-  }
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Request Randomness</CardTitle>
-        <CardDescription>Request a new random number!</CardDescription>
-      </CardHeader>
-      <Form {...form}>
-        <form className="contents" onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="space-y-4">
-            <fieldset
-              disabled={form.formState.isSubmitting || isConfirming}
-              className="grid grid-cols-3 gap-4"
-            >
-              <FormField
-                control={form.control}
-                name="operatorPublicKey"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Operator</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select an operator" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {operators.map((operator) => (
-                          <SelectItem
-                            key={operator}
-                            value={operator}
-                            className="tabular-nums"
-                          >
-                            {formatOperator(operator)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      The Operator who should fulfill the request
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="minBlockConfirmations"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Minimum Block Confirmations</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        onChange={(e) => field.onChange(+e.target.value)}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      How long to wait for randomness. Longer is better.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="callbackGasLimit"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Callback gas limit</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        onChange={(e) => field.onChange(+e.target.value)}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      How much gas to send to the callback.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </fieldset>
-            {(!!prepareError?.message || !!writeError?.message) && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription className="break-all">
-                  {prepareError?.message ?? writeError?.message}
-                </AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <Button disabled={form.formState.isSubmitting || isConfirming}>
-              {isConfirming && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}{' '}
-              🎲 I&apos;m feeling lucky
-            </Button>
-          </CardFooter>
-        </form>
-      </Form>
-    </Card>
   );
 }

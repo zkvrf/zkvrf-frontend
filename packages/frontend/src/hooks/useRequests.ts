@@ -18,6 +18,8 @@ export interface Request {
     randomness: bigint;
     blockNumber: bigint;
     blockTimestamp: bigint;
+    transactionHash: Hex;
+    nonce: bigint;
   } | null;
 }
 
@@ -37,7 +39,7 @@ export function useRequests() {
   return useSWR(
     [
       `{
-        requests(first: 1000) {
+        requests(first: 1000, orderBy: id, orderDirection: desc) {
           operator {
             id
           }
@@ -55,6 +57,8 @@ export function useRequests() {
             randomness
             blockNumber
             blockTimestamp
+            transactionHash
+            nonce
           }
         }
         operators(first: 1000) {
@@ -78,8 +82,8 @@ export function useOperatorRequests({
     () =>
       operator
         ? [
-            `query Requests($operator: String) {
-        requests(first: 1000, where: {operator: $operator}) {
+            `query Requests($operator!: String) {
+        requests(where: {operator: $operator}, first: 1000, orderBy: id, orderDirection: desc) {
           operator {
             id
           }
@@ -97,6 +101,8 @@ export function useOperatorRequests({
             randomness
             blockNumber
             blockTimestamp
+            transactionHash
+            nonce
           }
         }
         operators(first: 1000) {

@@ -1,16 +1,18 @@
 'use client';
 
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { Badge } from './ui/badge';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from './ui/dialog';
+import { ToastAction } from './ui/toast';
 import { useToast } from './ui/use-toast';
-import { DialogDescription } from '@radix-ui/react-dialog';
 import {
   ColumnFiltersState,
   SortingState,
@@ -23,15 +25,25 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { AlertCircle, ChevronDown, Loader2 } from 'lucide-react';
+import {
+  AlertCircle,
+  CheckIcon,
+  ChevronDown,
+  ClockIcon,
+  LinkIcon,
+  Loader2,
+} from 'lucide-react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { Suspense, useState } from 'react';
 import useSWR from 'swr';
 import { useLocalStorage } from 'usehooks-ts';
 import { Hex, zeroAddress } from 'viem';
 import {
+  useBlockNumber,
   useContractRead,
   useContractWrite,
+  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
@@ -84,44 +96,51 @@ export const columns = [
   columnHelper.accessor((row) => row.fulfillment, {
     id: 'status',
     header: 'Status',
-    cell: (info) => (info.getValue() ? 'Fulfilled' : 'Open'),
+    cell: (info) => (
+      <Badge variant="outline">
+        {info.getValue() ? (
+          <>
+            <CheckIcon size="1em" className="mr-1" /> Fulfilled
+          </>
+        ) : (
+          <>
+            <ClockIcon size="1em" className="mr-1" /> Open
+          </>
+        )}
+      </Badge>
+    ),
   }),
   columnHelper.accessor((row) => row.request.blockTimestamp, {
     id: 'Requested At',
     header: 'Requested At',
-    cell: (info) =>
-      new Date(Number(info.getValue()) * 1000).toLocaleString('en-US'),
+    cell: (info) => <RequestLink request={info.row.original} />,
   }),
   columnHelper.accessor((row) => row.fulfillment?.blockTimestamp, {
     id: 'Fulfilled At',
     header: 'Fulfilled At',
-    cell: (info) =>
-      info.getValue() !== undefined
-        ? new Date(Number(info.getValue()) * 1000).toLocaleString('en-US')
-        : '–',
+    cell: (info) => <FulfillmentLink request={info.row.original} />,
   }),
-  columnHelper.accessor((row) => row.operator.id, {
+  columnHelper.accessor((row) => row, {
     id: 'Fulfill Request',
-    //header: 'Fulfilled At',
-    cell: (info) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const operatorPublicKey = info.table.options.meta?.operatorPublicKey as
-        | Hex
-        | undefined;
-      if (
-        operatorPublicKey &&
-        info.getValue().toLowerCase() === operatorPublicKey.toLowerCase()
-      ) {
-        return <FullfillRandomnessFlow request={info.row.original} />;
-      }
-
-      return null;
-    },
+    header: () => null,
+    cell: (info) => (
+      <Fulfill
+        request={info.getValue()}
+        // eslint-disable-next-line
+        // @ts-ignore
+        onSuccess={info.table.options.meta?.refresh}
+      />
+    ),
   }),
 ];
 
-export function RequestsTable({ requests }: { requests: Request[] }) {
+export function RequestsTable({
+  requests,
+  onRefresh,
+}: {
+  requests: Request[];
+  onRefresh?: () => void;
+}) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -152,6 +171,7 @@ export function RequestsTable({ requests }: { requests: Request[] }) {
     },
     meta: {
       operatorPublicKey,
+      refresh: onRefresh,
     },
   });
 
@@ -271,7 +291,13 @@ export function RequestsTable({ requests }: { requests: Request[] }) {
   );
 }
 
-function FullfillRandomnessFlow({ request }: { request: Request }) {
+function FullfillRandomnessFlow({
+  request,
+  onSuccess,
+}: {
+  request: Request;
+  onSuccess?: () => void;
+}) {
   const [operator] = useLocalStorage<Hex | null>('operator', null);
 
   if (!operator) return null;
@@ -288,19 +314,100 @@ function FullfillRandomnessFlow({ request }: { request: Request }) {
             Generate a verifiable random number and post it to the blockchain
           </DialogDescription>
         </DialogHeader>
-        <FullfillRandomnessFlowContent request={request} operator={operator} />
+        <FullfillRandomnessFlowContent
+          request={request}
+          operator={operator}
+          onSuccess={onSuccess}
+        />
       </DialogContent>
     </Dialog>
+  );
+}
+
+function Fulfill({
+  request,
+  onSuccess,
+}: {
+  request: Request;
+  onSuccess?: () => void;
+}) {
+  const { data: blockHeight } = useBlockNumber({ watch: true });
+  const [operator] = useLocalStorage<Hex | null>('operator', null);
+
+  const { data: operatorPublicKey } = useSWR(operator, (privateKey) =>
+    poseidon([BigInt(privateKey)])
+  );
+
+  const difference = blockHeight
+    ? BigInt(request.request.blockNumber) +
+      BigInt(request.request.minBlockConfirmations) -
+      blockHeight
+    : 0n;
+
+  if (difference > 0n) {
+    return <Button disabled>Waiting for {difference.toString()} blocks</Button>;
+  }
+
+  if (
+    operatorPublicKey &&
+    request.operator.id.toLowerCase() === operatorPublicKey.toLowerCase() &&
+    !request.fulfillment
+  ) {
+    return <FullfillRandomnessFlow request={request} onSuccess={onSuccess} />;
+  }
+
+  return null;
+}
+
+function FulfillmentLink({ request }: { request: Request }) {
+  const { chain } = useNetwork();
+  if (!request.fulfillment) return '–';
+  return (
+    <Link
+      className="flex items-center gap-2 decoration-dotted hover:underline"
+      href={`${chain?.blockExplorers?.default.url}/tx/${request.fulfillment.transactionHash}`}
+      target="_blank"
+    >
+      <span>
+        {new Date(
+          Number(request.fulfillment.blockTimestamp) * 1000
+        ).toLocaleString('en-US')}
+      </span>
+
+      <LinkIcon className="h-3 w-3" />
+    </Link>
+  );
+}
+
+function RequestLink({ request }: { request: Request }) {
+  const { chain } = useNetwork();
+  return (
+    <Link
+      className="flex items-center gap-2 decoration-dotted hover:underline"
+      href={`${chain?.blockExplorers?.default.url}/tx/${request.request.transactionHash}`}
+      target="_blank"
+    >
+      <span>
+        {new Date(Number(request.request.blockTimestamp) * 1000).toLocaleString(
+          'en-US'
+        )}
+      </span>
+
+      <LinkIcon className="h-3 w-3" />
+    </Link>
   );
 }
 
 function FullfillRandomnessFlowContent({
   request,
   operator,
+  onSuccess,
 }: {
   request: Request;
   operator: Hex;
+  onSuccess?: () => void;
 }) {
+  const { chain } = useNetwork();
   const { toast } = useToast();
   const [proof, setProof] = useState<Uint8Array>();
 
@@ -315,7 +422,7 @@ function FullfillRandomnessFlowContent({
     functionName: 'blockHashHistorian',
   });
 
-  const { data: blockHash } = useContractRead({
+  const { data: blockHash, error: blockHashError } = useContractRead({
     abi: BlockHashHistorianABI,
     address: blockHashHistorianAddress,
     functionName: 'getBlockHash',
@@ -366,20 +473,54 @@ function FullfillRandomnessFlowContent({
     error: writeError,
   } = useContractWrite(config);
 
-  const { isLoading: isConfirming } = useWaitForTransaction({
+  const { isSuccess, isLoading: isConfirming } = useWaitForTransaction({
     hash: data?.hash,
     onSuccess() {
       toast({
         title: 'Fulfillment complete',
+        action: (
+          <ToastAction altText="Check transaction" asChild>
+            <Link
+              href={`${chain?.blockExplorers?.default.url}/tx/${data?.hash}`}
+              target="_blank"
+            >
+              Check transaction
+            </Link>
+          </ToastAction>
+        ),
       });
+      onSuccess?.();
     },
   });
+
+  if (blockHashError) {
+    return (
+      <Alert className="max-h-40 overflow-auto" variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription className="break-all">
+          {blockHashError.message}
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (isSuccess) {
+    return (
+      <>
+        <p>Success! You may now close this dialog</p>
+      </>
+    );
+  }
 
   if (!!proof && !!messageHash && !!signature) {
     return (
       <>
+        <p>
+          Your proof has been generated. You can now post it to the blockchain.
+        </p>
         {(!!prepareError?.message || !!writeError?.message) && (
-          <Alert variant="destructive">
+          <Alert className="max-h-40 overflow-auto" variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription className="break-all">
@@ -388,9 +529,13 @@ function FullfillRandomnessFlowContent({
           </Alert>
         )}
         <DialogFooter>
-          <Button disabled={isWriting || isConfirming} onClick={write}>
+          <Button
+            className="w-full"
+            disabled={isWriting || isConfirming}
+            onClick={write}
+          >
             {isConfirming && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}{' '}
-            Send fulfillment transaction
+            Send transaction
           </Button>
         </DialogFooter>
       </>

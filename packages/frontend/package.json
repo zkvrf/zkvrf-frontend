@@ -28,7 +28,7 @@
     "class-variance-authority": "^0.7.0",
     "graphql-request": "^6.1.0",
     "lucide-react": "^0.288.0",
-    "next": "13.5.5",
+    "next": "13.5.6",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-dom": "^18",
@@ -44,11 +44,11 @@
   "devDependencies": {
     "@types/circomlibjs": "^0.1.5",
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "^18.2.30",
     "@types/react-dom": "^18.2.14",
     "autoprefixer": "^10",
     "eslint": "^8",
-    "eslint-config-next": "13.5.5",
+    "eslint-config-next": "13.5.6",
     "postcss": "^8",
     "tailwindcss": "^3",
     "typescript": "^5"

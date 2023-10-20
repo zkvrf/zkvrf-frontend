@@ -1,4 +1,5 @@
 import { Container } from './Container';
+import { ModeToggle } from './ModeToggle';
 import { WalletButton } from './WalletButton';
 import Link from 'next/link';
 import { ReactNode } from 'react';
@@ -8,14 +9,26 @@ export function Layout({ children }: { children: ReactNode }) {
     <div className="flex flex-col">
       <header className="border-b">
         <Container className="flex min-h-[4rem] items-center">
-          <div className="flex-grow">
+          <div className="flex flex-grow items-center gap-8">
             <Link href="/" className="font-bold">
-              <span className="mr-2">🎲</span> zkVRF
+              <span className="mr-1">🎲</span> zkVRF
             </Link>
           </div>
 
-          <div className="flex items-center gap-4">
-            <WalletButton />
+          <div className="flex items-center gap-8">
+            <Link className="hover:underline" href="/">
+              Dashboard
+            </Link>
+            <Link className="hover:underline" href="/request">
+              Request
+            </Link>
+            <Link className="hover:underline" href="/operator">
+              Operator
+            </Link>
+            <div className="flex items-center gap-4">
+              <WalletButton />
+              <ModeToggle />
+            </div>
           </div>
         </Container>
       </header>
