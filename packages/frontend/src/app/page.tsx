@@ -1,9 +1,9 @@
 'use client';
 
-import { Randomness } from './request/page';
 import { AlertTriangle, DicesIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Container } from '~/components/Container';
+import { Randomness } from '~/components/Randomness';
 import { RequestsTable } from '~/components/RequestsTable';
 import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card';
