@@ -1004,6 +1004,11 @@
   resolved "https://registry.yarnpkg.com/@noir-lang/noirc_abi/-/noirc_abi-0.16.0-37315f8.nightly.tgz#57aa000b18a4519142448f34afe3135ffb6d6e8c"
   integrity sha512-avcz1K8u3nb/TEqAE25P49A2N2Pg7VdLgj8LLExtZtBygDiJVTFyrTRgrZ3vv9i8KXBlnK//SZVkgXEwMxir+A==
 
+"@noir-lang/noirc_abi@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@noir-lang/noirc_abi/-/noirc_abi-0.17.0.tgz#3f02362356ad61267b9ce241309f65b50c4adcc0"
+  integrity sha512-tpFsjaac+w8egXJy5sxf2EqOMSws+30angpVqsO1vGPwGZfsnH4FHKEb0L8BvzPmPEAzXh8+WBX/pl52WaLfoA==
+
 "@noir-lang/types@0.16.0-37315f8.nightly":
   version "0.16.0-37315f8.nightly"
   resolved "https://registry.yarnpkg.com/@noir-lang/types/-/types-0.16.0-37315f8.nightly.tgz#bbb3664184bc452ff5d12f3d129e90c4baf41d20"
