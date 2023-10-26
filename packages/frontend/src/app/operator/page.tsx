@@ -15,7 +15,6 @@ import { Hex } from 'viem';
 import {
   useContractRead,
   useContractWrite,
-  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
@@ -38,6 +37,7 @@ import { Input } from '~/components/ui/input';
 import { Separator } from '~/components/ui/separator';
 import { ToastAction } from '~/components/ui/toast';
 import { useToast } from '~/components/ui/use-toast';
+import { useChain } from '~/hooks/useChain';
 import { useOperatorRequests } from '~/hooks/useRequests';
 import { formatOperator } from '~/lib/address';
 import { ZKVRF_ADDRESS } from '~/lib/constants';
@@ -252,7 +252,7 @@ function OperatorSignupFlowContent({
 }: {
   onSuccess: (operator: Hex) => void;
 }) {
-  const { chain } = useNetwork();
+  const chain = useChain();
   const { toast } = useToast();
   const operatorPrivateKey = useMemo(() => {
     for (;;) {

@@ -11,7 +11,6 @@ import { Hex, decodeEventLog } from 'viem';
 import {
   useContractRead,
   useContractWrite,
-  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
@@ -47,6 +46,7 @@ import {
 } from '~/components/ui/select';
 import { ToastAction } from '~/components/ui/toast';
 import { useToast } from '~/components/ui/use-toast';
+import { useChain } from '~/hooks/useChain';
 import { useRequests } from '~/hooks/useRequests';
 import { formatOperator } from '~/lib/address';
 import { ZKVRF_CONSUMER_ADDRESS } from '~/lib/constants';
@@ -63,7 +63,7 @@ const formSchema = z.object({
 });
 
 export function Randomness({ onSuccess }: { onSuccess?: () => void }) {
-  const { chain } = useNetwork();
+  const chain = useChain();
   const { data: requestsData, mutate: refresh } = useRequests();
 
   const { toast } = useToast();
