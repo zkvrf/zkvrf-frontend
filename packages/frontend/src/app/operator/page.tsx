@@ -60,7 +60,9 @@ export default function OperatorPage() {
     return (
       <Container className="space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="text-3xl font-bold tracking-tight">Operator</h2>
+          <h2 className="font-serif text-3xl font-medium tracking-tight">
+            Operator
+          </h2>
         </div>
         <OperatorSignup onSuccess={setOperator} />
       </Container>
@@ -70,9 +72,12 @@ export default function OperatorPage() {
   return (
     <Container className="space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-3xl font-bold tracking-tight">
+        <h2 className="font-serif text-3xl font-medium tracking-tight">
           Operator{' '}
-          <span className="tabular-nums">
+          <span
+            title={operatorPublicKey}
+            className="font-mono text-xl tabular-nums"
+          >
             {isLoading ? '…' : formatOperator(operatorPublicKey)}
           </span>
         </h2>
