@@ -82,7 +82,7 @@ export function useOperatorRequests({
     () =>
       operator
         ? [
-            `query Requests($operator!: String) {
+            `query Requests($operator: String) {
         requests(where: {operator: $operator}, first: 1000, orderBy: id, orderDirection: desc) {
           operator {
             id
