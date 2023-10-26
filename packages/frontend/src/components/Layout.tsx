@@ -10,7 +10,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="border-b">
         <Container className="flex min-h-[4rem] items-center">
           <div className="flex flex-grow items-center gap-8">
-            <Link href="/" className="font-bold">
+            <Link href="/" className="font-serif text-xl font-medium">
               <span className="mr-1">🎲</span> zkVRF
             </Link>
           </div>

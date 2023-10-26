@@ -43,7 +43,6 @@ import {
   useBlockNumber,
   useContractRead,
   useContractWrite,
-  useNetwork,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
@@ -65,6 +64,7 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui/table';
+import { useChain } from '~/hooks/useChain';
 import { Request } from '~/hooks/useRequests';
 import { formatAddress, formatOperator } from '~/lib/address';
 import { ZKVRF_ADDRESS } from '~/lib/constants';
@@ -363,7 +363,7 @@ function Fulfill({
 }
 
 function FulfillmentLink({ request }: { request: Request }) {
-  const { chain } = useNetwork();
+  const chain = useChain();
   if (!request.fulfillment) return '–';
   return (
     <Link
@@ -383,7 +383,7 @@ function FulfillmentLink({ request }: { request: Request }) {
 }
 
 function RequestLink({ request }: { request: Request }) {
-  const { chain } = useNetwork();
+  const chain = useChain();
   return (
     <Link
       className="flex items-center gap-2 decoration-dotted hover:underline"
@@ -410,7 +410,7 @@ function FullfillRandomnessFlowContent({
   operator: Hex;
   onSuccess?: () => void;
 }) {
-  const { chain } = useNetwork();
+  const chain = useChain();
   const { toast } = useToast();
   const [proof, setProof] = useState<Uint8Array>();
 
