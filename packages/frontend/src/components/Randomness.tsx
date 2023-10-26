@@ -279,7 +279,7 @@ export function Randomness({ onSuccess }: { onSuccess?: () => void }) {
         </form>
       </Form>
       <Confetti
-        className="!fixed"
+        className="!fixed z-[100]"
         width={width}
         height={height}
         numberOfPieces={party ? 500 : 0}
